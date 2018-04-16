@@ -4,25 +4,23 @@ language: generic
 cache:
 - directories:
   - "$HOME/texlive/2017/texmf-var/luatex-cache"
-  - "$HOME/.ghc"
   - "$HOME/.cabal"
   - "$HOME/.local"
-  - "$HOME/.stack"
 branches:
   only:
   - master
 addons:
   apt:
     packages:
-    - cabal-install-1.22
-    - ghc-7.10.3
+    - cabal-install-2.0
+    - ghc-8.4.1
     - ttf-bitstream-vera
     - inkscape
     sources:
     - hvr-ghc
 before_install:
 - git clone https://github.com/hazama-yuinyan/book.git
-- export PATH=/opt/ghc/7.10.3/bin:/opt/cabal/1.22/bin:$HOME/.local/bin:$HOME/.cabal/bin:$PATH
+- export PATH=/opt/ghc/8.4.1/bin:/opt/cabal/2.0/bin:$HOME/.local/bin:$HOME/.cabal/bin:$PATH
 - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/install-tex.sh
 - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/tlmgr.sh
 - chmod +x install-tex.sh tlmgr.sh
@@ -32,11 +30,12 @@ before_install:
 - cp source-code-pro-2.030R-ro-1.050R-it/OTF/*.otf ~/.fonts/
 - fc-cache -f -v
 - cabal update
+
 install:
+- cabal install pandoc-2.1.3
 - ". ./install-tex.sh"
 - "./tlmgr.sh install latexmk collection-luatex collection-langjapanese collection-fontsrecommended
   filehook type1cm mdframed needspace fncychap everyhook svn-prov enumitem"
-- cabal install pandoc-2.1
 - pip install --user --upgrade pip
 - pip install --user -r requirements.txt
 before_script:
