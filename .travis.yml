@@ -42,9 +42,9 @@ before_script:
 - export USE_IPAFONT=true
 script:
 - "./setup.sh"
-#- make all
+- make all
 after_success:
-#- "./deploy.sh"
+- "./deploy.sh"
 env:
   global:
     secure: gAp4f13/5ZPGOYZTyd6VSC+QVU1TG5tDb0YMoIgSPQ8TNSOi3C4BQ9hdK05BRjo1fkeJwBBtHTh8yMMQ/Y75YnfscpzTtiTEXcxoEbNeGFeZysA0adcL9MbXWZ+QyH/DKFaL1w5aevXxSVV0/3bfh2grFXh73tTgl1/WhQ8PLBdNPLXyMX7pz9p27NL5l66LYjbIvdjSq+PFkEac9scoHVottA7dKcJSlRDMBSlqt2B4xEDbtP+8tp0D9tVWbzWJ1APZ1L6m+GZPzVmJDuFKJc3mYGze6eUI3NNoQUXhs1gZ0WHAivl/PQezWLQD/Z90hP3C36/eMS4mwOhQ0Km8vE6XH/EREvX+X6I4NxS3mP7OPwp1zyEPU+YZlEr9ydsjxREO/uib4Zog390z0JCRwB/6KYDQY8n2LQ4dxwV+fn195XtZAzuRRv+OFiwN5npvfbsyr837OFQhlW9GevVCLv/TzWct/2WPD9X1mzEE35mKgpWuzikkNdM9EEQGGo6VYEuk4g0ZVs4zoSOBaSgf013rSdjtDE9JOIax0pKRcK0lGx2/CJyyavHx1GJRshBhzg+I4jSejZKv2gpChNW1q/ovGrBzoJJTOE9IF/9fHXIjAYH0FtWx79Oh/XL4VAOq7ihmJCcxZswR4QAFPcCsxX/1rWlDxByWiA6CUTn0YNs=
