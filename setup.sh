@@ -9,7 +9,7 @@ do
     inkscape -z -D --file=`pwd`/img/${BASH_REMATCH[1]}.svg --export-pdf=`pwd`/${BASH_REMATCH[1]}.pdf --export-latex=`pwd`/${BASH_REMATCH[1]}.pdf_tex
   fi
 done
- 
+
 mkdir target
 
 for f in ./book/second-edition/src/*.md

@@ -31,7 +31,7 @@ def filter(key, value, fmt, meta):
         [_, text, [href, _]] = value
         if text == [Str("include")]:
             return mkInputListings(href)
-        elif href.endswith(".md"):
+        elif (not href.startswith("http")) and href.endswith(".md"):
             src = re.search(r'(?:./)?(.+\.md)', href).group(1)
             return mkRef(src)
     elif key == 'Image':

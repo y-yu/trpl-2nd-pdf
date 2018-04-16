@@ -123,7 +123,7 @@
     local summary = {}
 
     for l in handler:lines() do
-      local n = string.match(l, "%[.*%]%((.*)%.md%)")
+      local n = string.match(l, "%[.*%]%((.*)%.md%)$")
       table.insert(summary, n)
     end
     handler:close()
