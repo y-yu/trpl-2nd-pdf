@@ -1,0 +1,151 @@
+\documentclass[10pt, a4, oneside]{ltjsbook}
+\usepackage{amssymb,amsmath}
+\usepackage{fontspec}
+\usepackage[Lenny]{fncychap}
+\makeatletter
+\renewcommand{\DOCH}{%
+  \settowidth{\px}{\CNV\FmN{\@chapapp}}
+  \addtolength{\px}{2pt}
+  \settoheight{\py}{\CNV\FmN{\@chapapp}}
+  \addtolength{\py}{1pt}
+
+  \settowidth{\mylen}{\CNV\FmN{\@chapapp}\space\CNoV\thechapter}
+  \addtolength{\mylen}{1pt}
+  \settowidth{\pxx}{\CNoV\thechapter}
+  \addtolength{\pxx}{-1pt}
+
+  \settoheight{\pyy}{\CNoV\thechapter}
+  \addtolength{\pyy}{-2pt}
+  \setlength{\myhi}{\pyy}
+  \addtolength{\myhi}{-1\py}
+  \par
+  \parbox[b]{\textwidth}{%
+    \rule[\py]{\RW}{\myhi}%
+    \hskip -\RW%
+    \rule[\pyy]{\px}{\RW}%
+    \hskip -\px%
+    \raggedright%
+    \CNV\FmN{\@chapapp}\space\CNoV\thechapter\CNV\FmN{\@chappos}%
+    \hskip1pt%
+    \mghrulefill{\RW}%
+    \rule{\RW}{\pyy}\par\nobreak%
+    \vskip -\baselineskip%
+    \vskip -\pyy%
+    \hskip \mylen%
+    \mghrulefill{\RW}\par\nobreak%
+    \vskip \pyy}%
+  \vskip 20\p@}
+\makeatother
+
+\usepackage{luacode}
+
+\begin{luacode*}
+  USE_IPAFONT = os.getenv"USE_IPAFONT"
+  USE_YUFONT = os.getenv"USE_YUFONT"
+  
+  if USE_YUFONT == "true" then
+    tex.sprint("\\AtBeginDocument{\\usepackage[yu-osx, deluxe, expert]{luatexja-preset}}")
+  elseif USE_IPAFONT == "true" then
+    tex.sprint("\\AtBeginDocument{\\usepackage[ipaex, deluxe, expert]{luatexja-preset}}")
+  else
+    tex.sprint("\\AtBeginDocument{\\usepackage[hiragino-pro, deluxe, expert]{luatexja-preset}}")
+  end
+\end{luacode*}
+
+\usepackage[centering]{geometry}
+
+\usepackage[%
+  unicode=true,
+  breaklinks=true
+  bookmarks=true,
+  pdfborder={0 0 0},
+  bookmarksnumbered=true,
+  bookmarkstype=toc,
+  bookmarksopen=true,
+  pdfauthor={Yuu YOSHIMURA},
+  pdftitle={The Rust Programming Language: 2nd Edition}]{hyperref}
+
+\usepackage{xcolor}
+\usepackage{fancyvrb}
+\usepackage{mdframed}
+\usepackage{listings}
+\usepackage{enumitem}
+
+\input{listings.tex}
+
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>.8\linewidth\linewidth\else\Gin@nat@width\fi}
+\makeatother
+
+\setkeys{Gin}{width=\maxwidth, keepaspectratio}
+
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\providecommand{\passthrough}[1]{#1}
+
+\usepackage{ifthen}
+\LetLtxMacro\latexincludegraphics\includegraphics
+\makeatletter
+\renewcommand\includegraphics[2][]{%
+  \def\detectFileSvgOrNot[##1]##2.##3\nil{%
+    \ifthenelse{\equal{##3}{svg}}
+      {\input{##2.pdf_tex}}
+      {\latexincludegraphics[#1]{#2}}%
+  }%
+  \IfFileExists{#2}
+    {%
+      \filename@parse{#2}
+      \ifthenelse{\equal{\filename@ext}{svg}}
+        {\input{\filename@base.pdf_tex}}
+        {\latexincludegraphics[#1]{#2}}}
+    {%
+      \fbox{Image File doesn't exist}%
+      \message{Image File #2 doesn't exist^^J}}
+}
+\makeatother
+
+\setlistdepth{10}
+
+\begin{document}
+
+\begin{luacode*}
+  require("lualibs-util-jsn.lua")
+
+  local target = "./target/"
+
+  function readSummary(file)
+    local handler = io.open(file, "r")
+    local summary = {}
+
+    for l in handler:lines() do
+      local n = string.match(l, "%[.*%]%((.*)%.md%)")
+      table.insert(summary, n)
+    end
+    handler:close()
+
+    return summary
+  end
+
+  function getTeXFile(target, name)
+    return target .. name .. ".tex"
+  end
+
+  local summaryFile = target .. "SUMMARY.md"
+
+  tex.print("\\frontmatter")
+
+  tex.print("\\tableofcontents")
+
+  tex.print("\\mainmatter")
+  tex.print("\\setcounter{secnumdepth}{3}")
+  for k, v in pairs(readSummary(summaryFile)) do
+    tex.print("\\input{" .. getTeXFile(target, v) .. "}")
+  end
+\end{luacode*}
+
+\end{document}
