@@ -35,7 +35,7 @@ install:
 - cabal install pandoc-2.1.3
 - ". ./install-tex.sh"
 - "./tlmgr.sh install latexmk collection-luatex collection-langjapanese collection-fontsrecommended
-  type1cm mdframed needspace fncychap everyhook svn-prov enumitem"
+  type1cm mdframed needspace fncychap everyhook svn-prov enumitem pdfpages"
 - pip install --user --upgrade pip
 - pip install --user -r requirements.txt
 before_script:

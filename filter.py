@@ -49,6 +49,11 @@ def filter(key, value, fmt, meta):
         if level == 1:
             file_name = os.getenv('FILENAME', "FILE_DOES_NOT_EXIST")
             value[1][0] = file_name
+    elif key == 'RawInline':
+        [t, s] = value
+        if t == 'html' and '<img' in s:
+            src = re.search(r'src="img/(.+?)"', s).group(1)
+            return mkIncludegraphics(src)
 
 if __name__ == "__main__":
     toJSONFilter(filter)
