@@ -70,6 +70,7 @@
 \usepackage{mdframed}
 \usepackage{listings}
 \usepackage{enumitem}
+\usepackage{pdfpages}
 
 \input{listings.tex}
 
@@ -101,7 +102,8 @@
     {%
       \filename@parse{#2}
       \ifthenelse{\equal{\filename@ext}{svg}}
-        {\input{\filename@base.pdf_tex}}
+        % {\input{\filename@base.pdf_tex}}
+        {\includepdf[scale=0.5]{\filename@base.pdf}}
         {\latexincludegraphics[#1]{#2}}}
     {%
       \fbox{Image File doesn't exist}%
