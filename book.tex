@@ -40,12 +40,12 @@
 \usepackage{luacode}
 
 \begin{luacode*}
-  USE_IPAFONT = os.getenv"USE_IPAFONT"
-  USE_YUFONT = os.getenv"USE_YUFONT"
+  local USE_IPAFONT = os.getenv"USE_IPAFONT"
+  local USE_YUFONT = os.getenv"USE_YUFONT"
   
-  if USE_YUFONT == "true" then
+  if USE_YUFONT then
     tex.sprint("\\AtBeginDocument{\\usepackage[yu-osx, deluxe, expert]{luatexja-preset}}")
-  elseif USE_IPAFONT == "true" then
+  elseif USE_IPAFONT then
     tex.sprint("\\AtBeginDocument{\\usepackage[ipaex, deluxe, expert]{luatexja-preset}}")
   else
     tex.sprint("\\AtBeginDocument{\\usepackage[hiragino-pro, deluxe, expert]{luatexja-preset}}")
@@ -116,11 +116,9 @@
 \begin{document}
 
 \begin{luacode*}
-  require("lualibs-util-jsn.lua")
-
   local target = "./target/"
 
-  function readSummary(file)
+  local function readSummary(file)
     local handler = io.open(file, "r")
     local summary = {}
 
@@ -133,7 +131,7 @@
     return summary
   end
 
-  function getTeXFile(target, name)
+  local function getTeXFile(target, name)
     return target .. name .. ".tex"
   end
 
