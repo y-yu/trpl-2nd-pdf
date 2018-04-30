@@ -22,6 +22,8 @@ addons:
 before_install:
 - export PATH=/opt/ghc/8.4.1/bin:/opt/cabal/2.0/bin:$HOME/.local/bin:$HOME/.cabal/bin:$PATH
 
+- rm -rf $HOME/texlive/texmf-var/luatex-cache
+
 # Download TRPL 2nd japanese markdown sources
 - git clone https://github.com/hazama-yuinyan/book.git
 
@@ -30,15 +32,26 @@ before_install:
 - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/tlmgr.sh
 - chmod +x install-tex.sh tlmgr.sh
 
-# Download fonts: Source Code Pro
+# Setup font directory
+- mkdir -p ~/.fonts
+
+# Download fonts: Source Code Pro and setup
 - wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
 - unzip 1.050R-it.zip
-- mkdir -p ~/.fonts
 - cp source-code-pro-2.030R-ro-1.050R-it/OTF/*.otf ~/.fonts/
 
-# Download fonts: Source Han Sans and Source Han Serif
-- wget -O ~/.fonts/SourceHanSans.ttc https://github.com/adobe-fonts/source-han-sans/releases/download/1.004R/SourceHanSans.ttc
-- wget -O ~/.fonts/SourceHanSerif.ttc https://github.com/adobe-fonts/source-han-serif/releases/download/1.001R/SourceHanSerif.ttc
+# Download Source Han Sans fonts and setup
+- wget https://github.com/adobe-fonts/source-han-sans/raw/release/OTF/SourceHanSansJ.zip
+- unzip SourceHanSansJ.zip
+- cp SourceHanSansJ/*.otf ~/.fonts/
+
+# Download Source Han Serif fonts and setup
+- wget https://github.com/adobe-fonts/source-han-serif/raw/release/OTF/SourceHanSerifJ_EL-M.zip
+- wget https://github.com/adobe-fonts/source-han-serif/raw/release/OTF/SourceHanSerifJ_SB-H.zip
+- unzip SourceHanSerifJ_EL-M.zip
+- unzip SourceHanSerifJ_SB-H.zip
+- cp SourceHanSerifJ_EL-M/*.otf ~/.fonts/
+- cp SourceHanSerifJ_SB-H/*.otf ~/.fonts/
 
 # Setup fonts
 - fc-cache -f -v
