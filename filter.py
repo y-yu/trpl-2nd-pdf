@@ -14,8 +14,24 @@ def mkListingsEnvironment(code):
 def mkInputListings(src):
     return RawInline('latex', "\\lstinputlisting[style=rust]{" + src + "}")
 
-def mkIncludegraphics(src):
-    return RawInline('latex', "\\includegraphics{img/" + src + "}")
+def mkFigure(path, align=None, scale=None):
+    scale = '' if scale is None else '%.2f' % scale
+
+    if not os.path.exists(path):
+        return [RawBlock('latex', '\fbox{Image File does not exist}'),
+                RawBlock('latex', '\message{Image File `%s` does not exist}' % path)]
+
+    root, ext = os.path.splitext(path)
+    if ext == '.svg':
+        svgwidth = r'\def\svgwidth{%s\textwidth}' % scale
+        input_ = r'\input{%s}' % (os.path.basename(root) + '.pdf_tex')
+        if align == 'center':
+            return RawBlock('latex', '\n'.join(
+                (r'\begin{center}', svgwidth, input_, r'\end{center}')))
+        else:
+            return RawBlock('latex', svgwidth + '\n' + input_)
+    else:
+        return RawBlock('latex', r'\includegraphics{%s}' % path)
 
 def mkRef(src):
     return RawInline('latex', "\\ref{" + src + u"}章")
@@ -54,6 +70,18 @@ def filter(key, value, fmt, meta):
         if t == 'html' and '<img' in s:
             src = re.search(r'src="img/(.+?)"', s).group(1)
             return mkIncludegraphics(src)
+    elif key == 'Para':
+        if value[0]['t'] == 'RawInline':
+            fmt, content = value[0]['c']
+            if fmt == 'html' and '<img' in content:
+                src = re.search(r'src="(img/.+?)"', content).group(1)
+                cls = re.search(r'class="(.+?)"', content)
+                if cls:
+                    cls = cls.group(1)
+                width = re.search(r'style="width: *(\d+)%;?', content)
+                if width:
+                    width = float(width.group(1)) / 100
+                return mkFigure(src, align=cls, scale=width)
 
 if __name__ == "__main__":
     toJSONFilter(filter)
