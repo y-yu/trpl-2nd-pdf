@@ -6,8 +6,13 @@ cp -r ./book/second-edition/src/img ./
 for f in ./img/*.svg
 do
   if [[ $f =~ \./img/(.*)\.svg ]]; then
-    inkscape -z -D --file=`pwd`/img/${BASH_REMATCH[1]}.svg --export-pdf=`pwd`/${BASH_REMATCH[1]}.pdf
-    # inkscape -z -D --file=`pwd`/${BASH_REMATCH[1]}.pdf --export-latex=`pwd`/${BASH_REMATCH[1]}.pdf_tex
+    SVG=`pwd`/img/${BASH_REMATCH[1]}.svg
+    PDF=`pwd`/${BASH_REMATCH[1]}.pdf
+    PDFTEX=`pwd`/${BASH_REMATCH[1]}.pdf_tex
+    inkscape -z -D --file="$SVG" --export-pdf="$PDF" --export-latex
+    PAGES=$(egrep -a '/Type /Page\b' "$PDF" | wc -l | tr -d ' ')
+    python fix_pdf_tex.py "$PAGES" < "$PDFTEX" > "$PDFTEX.tmp"
+    mv "$PDFTEX.tmp" "$PDFTEX"
   fi
 done
 
