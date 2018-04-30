@@ -50,7 +50,7 @@
   if USE_YUFONT then
     tex.sprint("\\AtBeginDocument{\\usepackage[yu-osx, deluxe, expert]{luatexja-preset}}")
   elseif USE_SOURCEHAN then
-    tex.sprint("\\AtBeginDocument{\\usepackage[sourcehan, deluxe, expert, bold]{luatexja-preset}}")
+    tex.sprint("\\AtBeginDocument{\\usepackage[sourcehan, deluxe, expert]{luatexja-preset}}")
   elseif USE_HIRAGINO then
     tex.sprint("\\AtBeginDocument{\\usepackage[hiragino-pro, deluxe, expert]{luatexja-preset}}")
   else
@@ -127,7 +127,7 @@
 
 % 強調をボールドにする
 \let\emph\relax
-\DeclareTextFontCommand{\emph}{\gtfamily}
+\DeclareTextFontCommand{\emph}{\gtfamily\bfseries}
 
 \begin{document}
 
