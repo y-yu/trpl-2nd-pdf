@@ -2,6 +2,8 @@
 \usepackage{amssymb,amsmath}
 \usepackage{fontspec}
 \usepackage[Lenny]{fncychap}
+
+% チャプターマークの設定
 \makeatletter
 \renewcommand{\DOCH}{%
   \settowidth{\px}{\CNV\FmN{\@chapapp}}
@@ -39,16 +41,20 @@
 
 \usepackage{luacode}
 
+% フォント設定
 \begin{luacode*}
-  local USE_IPAFONT = os.getenv"USE_IPAFONT"
   local USE_YUFONT = os.getenv"USE_YUFONT"
+  local USE_SOURCEHAN = os.getenv"USE_SOURCEHAN"
+  local USE_HIRAGINO = os.getenv"USE_HIRAGINO"
   
   if USE_YUFONT then
     tex.sprint("\\AtBeginDocument{\\usepackage[yu-osx, deluxe, expert]{luatexja-preset}}")
-  elseif USE_IPAFONT then
-    tex.sprint("\\AtBeginDocument{\\usepackage[ipaex, deluxe, expert]{luatexja-preset}}")
-  else
+  elseif USE_SOURCEHAN then
+    tex.sprint("\\AtBeginDocument{\\usepackage[sourcehan, deluxe, expert, bold]{luatexja-preset}}")
+  elseif USE_HIRAGINO then
     tex.sprint("\\AtBeginDocument{\\usepackage[hiragino-pro, deluxe, expert]{luatexja-preset}}")
+  else
+    tex.sprint("\\AtBeginDocument{\\usepackage[ipaex, deluxe, expert]{luatexja-preset}}")
   end
 \end{luacode*}
 
@@ -77,20 +83,23 @@
 \usepackage{longtable,booktabs}
 \usepackage{graphicx,grffile}
 
+% 画像の設定
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>.8\linewidth\linewidth\else\Gin@nat@width\fi}
 \makeatother
-
 \setkeys{Gin}{width=\maxwidth, keepaspectratio}
 
+% Pandocが要求するマクロを定義
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 \providecommand{\passthrough}[1]{#1}
 
+% ヘッダーの長さを調整するワークアラウンド
 \setlength{\fullwidth}{\textwidth}
 
+% 画像がない場合にコンパイルを無理やり実行する設定
 \usepackage{ifthen}
 \LetLtxMacro\latexincludegraphics\includegraphics
 \makeatletter
@@ -113,7 +122,12 @@
 }
 \makeatother
 
+% リストを入れ子にできる限界を拡張
 \setlistdepth{10}
+
+% 強調をボールドにする
+\let\emph\relax
+\DeclareTextFontCommand{\emph}{\gtfamily}
 
 \begin{document}
 
