@@ -3,7 +3,7 @@ dist: trusty
 language: generic
 cache:
 - directories:
-  - "$HOME/texlive/2017/texmf-var/luatex-cache"
+  - "$HOME/texlive/texmf-var/luatex-cache"
   - "$HOME/.ghc"
   - "$HOME/.cabal"
   - "$HOME/.local"
