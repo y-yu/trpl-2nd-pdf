@@ -2,6 +2,8 @@
 \usepackage{amssymb,amsmath}
 \usepackage{fontspec}
 \usepackage[Lenny]{fncychap}
+
+% チャプターマークの設定
 \makeatletter
 \renewcommand{\DOCH}{%
   \settowidth{\px}{\CNV\FmN{\@chapapp}}
@@ -39,16 +41,20 @@
 
 \usepackage{luacode}
 
+% フォント設定
 \begin{luacode*}
-  local USE_IPAFONT = os.getenv"USE_IPAFONT"
   local USE_YUFONT = os.getenv"USE_YUFONT"
+  local USE_SOURCEHAN = os.getenv"USE_SOURCEHAN"
+  local USE_HIRAGINO = os.getenv"USE_HIRAGINO"
   
   if USE_YUFONT then
-    tex.sprint("\\AtBeginDocument{\\usepackage[yu-osx, deluxe, expert]{luatexja-preset}}")
-  elseif USE_IPAFONT then
-    tex.sprint("\\AtBeginDocument{\\usepackage[ipaex, deluxe, expert]{luatexja-preset}}")
+    tex.sprint("\\AtBeginDocument{\\usepackage[yu-osx, nfssonly]{luatexja-preset}}")
+  elseif USE_SOURCEHAN then
+    tex.sprint("\\AtBeginDocument{\\usepackage[sourcehan-jp, nfssonly]{luatexja-preset}}")
+  elseif USE_HIRAGINO then
+    tex.sprint("\\AtBeginDocument{\\usepackage[hiragino-pro, nfssonly]{luatexja-preset}}")
   else
-    tex.sprint("\\AtBeginDocument{\\usepackage[hiragino-pro, deluxe, expert]{luatexja-preset}}")
+    tex.sprint("\\AtBeginDocument{\\usepackage[ipaex, nfssonly]{luatexja-preset}}")
   end
 \end{luacode*}
 
@@ -70,84 +76,52 @@
 \usepackage{mdframed}
 \usepackage{listings}
 \usepackage{enumitem}
-\usepackage{pdfpages}
 
 \input{listings.tex}
 
 \usepackage{longtable,booktabs}
 \usepackage{graphicx,grffile}
 
+% 画像の設定
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>.8\linewidth\linewidth\else\Gin@nat@width\fi}
 \makeatother
-
 \setkeys{Gin}{width=\maxwidth, keepaspectratio}
 
+% Pandocが要求するマクロを定義
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 \providecommand{\passthrough}[1]{#1}
 
+% ヘッダーの長さを調整するワークアラウンド
 \setlength{\fullwidth}{\textwidth}
 
+% 画像がない場合にコンパイルを無理やり実行する設定
 \usepackage{ifthen}
 \LetLtxMacro\latexincludegraphics\includegraphics
 \makeatletter
 \renewcommand\includegraphics[2][]{%
-  \def\detectFileSvgOrNot[##1]##2.##3\nil{%
-    \ifthenelse{\equal{##3}{svg}}
-      {\input{##2.pdf_tex}}
-      {\latexincludegraphics[#1]{#2}}%
-  }%
   \IfFileExists{#2}
     {%
-      \filename@parse{#2}
-      \ifthenelse{\equal{\filename@ext}{svg}}
-        % {\input{\filename@base.pdf_tex}}
-        {\includepdf[scale=0.5]{\filename@base.pdf}}
-        {\latexincludegraphics[#1]{#2}}}
+      \latexincludegraphics[#1]{#2}}
     {%
       \fbox{Image File doesn't exist}%
       \message{Image File #2 doesn't exist^^J}}
 }
 \makeatother
 
+% リストを入れ子にできる限界を拡張
 \setlistdepth{10}
+
+% 強調をボールドにする
+\let\emph\relax
+\DeclareTextFontCommand{\emph}{\gtfamily\bfseries}
 
 \begin{document}
 
-\begin{luacode*}
-  local target = "./target/"
-
-  local function readSummary(file)
-    local handler = io.open(file, "r")
-    local summary = {}
-
-    for l in handler:lines() do
-      local n = string.match(l, "%[.*%]%((.*)%.md%)$")
-      table.insert(summary, n)
-    end
-    handler:close()
-
-    return summary
-  end
-
-  local function getTeXFile(target, name)
-    return target .. name .. ".tex"
-  end
-
-  local summaryFile = target .. "SUMMARY.md"
-
-  tex.print("\\frontmatter")
-
-  tex.print("\\tableofcontents")
-
-  tex.print("\\mainmatter")
-  tex.print("\\setcounter{secnumdepth}{3}")
-  for k, v in pairs(readSummary(summaryFile)) do
-    tex.print("\\input{" .. getTeXFile(target, v) .. "}")
-  end
-\end{luacode*}
+% 本文
+\input{body.tex}
 
 \end{document}

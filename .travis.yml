@@ -21,30 +21,59 @@ addons:
     - hvr-ghc
 before_install:
 - export PATH=/opt/ghc/8.4.1/bin:/opt/cabal/2.0/bin:$HOME/.local/bin:$HOME/.cabal/bin:$PATH
+
+# Download TRPL 2nd japanese markdown sources
 - git clone https://github.com/hazama-yuinyan/book.git
+
+# Download TeXLive install scripts and set them up
 - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/install-tex.sh
 - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/tlmgr.sh
 - chmod +x install-tex.sh tlmgr.sh
+
+# Setup font directory
+- mkdir -p ~/.fonts
+
+# Download fonts: Source Code Pro and setup
 - wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
 - unzip 1.050R-it.zip
-- mkdir -p ~/.fonts
 - cp source-code-pro-2.030R-ro-1.050R-it/OTF/*.otf ~/.fonts/
+
+# Download Source Han Sans fonts and setup
+- wget https://github.com/adobe-fonts/source-han-sans/raw/release/SubsetOTF/SourceHanSansJP.zip
+- unzip SourceHanSansJP.zip
+- cp SourceHanSansJP/*.otf ~/.fonts/
+
+# Download Source Han Serif fonts and setup
+- wget https://github.com/adobe-fonts/source-han-serif/raw/release/SubsetOTF/SourceHanSerifJP.zip
+- unzip SourceHanSerifJP.zip
+- cp SourceHanSerifJP/*.otf ~/.fonts/
+
+# Setup fonts
 - fc-cache -f -v
+
+# Setup cabal to install pandoc
 - cabal update
 install:
+# Install pandoc
 - cabal install pandoc-2.1.3
+
+# Install LaTeX
 - ". ./install-tex.sh"
 - "./tlmgr.sh install latexmk collection-luatex collection-langjapanese collection-fontsrecommended
-  type1cm mdframed needspace fncychap everyhook svn-prov enumitem pdfpages"
+  type1cm mdframed needspace fncychap everyhook svn-prov enumitem"
+
+# Install Python libraries
 - pip install --user --upgrade pip
 - pip install --user -r requirements.txt
 before_script:
-- export USE_IPAFONT=true
+- export USE_SOURCEHAN=true
 script:
 - "./setup.sh"
 - make all
 after_success:
 - "./deploy.sh"
+after_failure:
+- cat book.log
 env:
   global:
     secure: gAp4f13/5ZPGOYZTyd6VSC+QVU1TG5tDb0YMoIgSPQ8TNSOi3C4BQ9hdK05BRjo1fkeJwBBtHTh8yMMQ/Y75YnfscpzTtiTEXcxoEbNeGFeZysA0adcL9MbXWZ+QyH/DKFaL1w5aevXxSVV0/3bfh2grFXh73tTgl1/WhQ8PLBdNPLXyMX7pz9p27NL5l66LYjbIvdjSq+PFkEac9scoHVottA7dKcJSlRDMBSlqt2B4xEDbtP+8tp0D9tVWbzWJ1APZ1L6m+GZPzVmJDuFKJc3mYGze6eUI3NNoQUXhs1gZ0WHAivl/PQezWLQD/Z90hP3C36/eMS4mwOhQ0Km8vE6XH/EREvX+X6I4NxS3mP7OPwp1zyEPU+YZlEr9ydsjxREO/uib4Zog390z0JCRwB/6KYDQY8n2LQ4dxwV+fn195XtZAzuRRv+OFiwN5npvfbsyr837OFQhlW9GevVCLv/TzWct/2WPD9X1mzEE35mKgpWuzikkNdM9EEQGGo6VYEuk4g0ZVs4zoSOBaSgf013rSdjtDE9JOIax0pKRcK0lGx2/CJyyavHx1GJRshBhzg+I4jSejZKv2gpChNW1q/ovGrBzoJJTOE9IF/9fHXIjAYH0FtWx79Oh/XL4VAOq7ihmJCcxZswR4QAFPcCsxX/1rWlDxByWiA6CUTn0YNs=
