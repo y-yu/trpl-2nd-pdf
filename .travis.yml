@@ -22,8 +22,6 @@ addons:
 before_install:
 - export PATH=/opt/ghc/8.4.1/bin:/opt/cabal/2.0/bin:$HOME/.local/bin:$HOME/.cabal/bin:$PATH
 
-- rm -rf $HOME/texlive/texmf-var/luatex-cache
-
 # Download TRPL 2nd japanese markdown sources
 - git clone https://github.com/hazama-yuinyan/book.git
 
@@ -41,17 +39,14 @@ before_install:
 - cp source-code-pro-2.030R-ro-1.050R-it/OTF/*.otf ~/.fonts/
 
 # Download Source Han Sans fonts and setup
-- wget https://github.com/adobe-fonts/source-han-sans/raw/release/OTF/SourceHanSansJ.zip
-- unzip SourceHanSansJ.zip
-- cp SourceHanSansJ/*.otf ~/.fonts/
+- wget https://github.com/adobe-fonts/source-han-sans/raw/release/SubsetOTF/SourceHanSansJP.zip
+- unzip SourceHanSansJP.zip
+- cp SourceHanSansJP/*.otf ~/.fonts/
 
 # Download Source Han Serif fonts and setup
-- wget https://github.com/adobe-fonts/source-han-serif/raw/release/OTF/SourceHanSerifJ_EL-M.zip
-- wget https://github.com/adobe-fonts/source-han-serif/raw/release/OTF/SourceHanSerifJ_SB-H.zip
-- unzip SourceHanSerifJ_EL-M.zip
-- unzip SourceHanSerifJ_SB-H.zip
-- cp SourceHanSerifJ_EL-M/*.otf ~/.fonts/
-- cp SourceHanSerifJ_SB-H/*.otf ~/.fonts/
+- wget https://github.com/adobe-fonts/source-han-serif/raw/release/SubsetOTF/SourceHanSerifJP.zip
+- unzip SourceHanSerifJP.zip
+- cp SourceHanSerifJP/*.otf ~/.fonts/
 
 # Setup fonts
 - fc-cache -f -v
@@ -65,7 +60,7 @@ install:
 # Install LaTeX
 - ". ./install-tex.sh"
 - "./tlmgr.sh install latexmk collection-luatex collection-langjapanese collection-fontsrecommended
-  type1cm mdframed needspace fncychap everyhook svn-prov enumitem pdfpages"
+  type1cm mdframed needspace fncychap everyhook svn-prov enumitem"
 
 # Install Python libraries
 - pip install --user --upgrade pip

@@ -48,13 +48,13 @@
   local USE_HIRAGINO = os.getenv"USE_HIRAGINO"
   
   if USE_YUFONT then
-    tex.sprint("\\AtBeginDocument{\\usepackage[yu-osx, deluxe, expert]{luatexja-preset}}")
+    tex.sprint("\\AtBeginDocument{\\usepackage[yu-osx, nfssonly]{luatexja-preset}}")
   elseif USE_SOURCEHAN then
-    tex.sprint("\\AtBeginDocument{\\usepackage[sourcehan, deluxe, expert]{luatexja-preset}}")
+    tex.sprint("\\AtBeginDocument{\\usepackage[sourcehan-jp, nfssonly]{luatexja-preset}}")
   elseif USE_HIRAGINO then
-    tex.sprint("\\AtBeginDocument{\\usepackage[hiragino-pro, deluxe, expert]{luatexja-preset}}")
+    tex.sprint("\\AtBeginDocument{\\usepackage[hiragino-pro, nfssonly]{luatexja-preset}}")
   else
-    tex.sprint("\\AtBeginDocument{\\usepackage[ipaex, deluxe, expert]{luatexja-preset}}")
+    tex.sprint("\\AtBeginDocument{\\usepackage[ipaex, nfssonly]{luatexja-preset}}")
   end
 \end{luacode*}
 
@@ -76,7 +76,6 @@
 \usepackage{mdframed}
 \usepackage{listings}
 \usepackage{enumitem}
-\usepackage{pdfpages}
 
 \input{listings.tex}
 
@@ -104,18 +103,9 @@
 \LetLtxMacro\latexincludegraphics\includegraphics
 \makeatletter
 \renewcommand\includegraphics[2][]{%
-  \def\detectFileSvgOrNot[##1]##2.##3\nil{%
-    \ifthenelse{\equal{##3}{svg}}
-      {\input{##2.pdf_tex}}
-      {\latexincludegraphics[#1]{#2}}%
-  }%
   \IfFileExists{#2}
     {%
-      \filename@parse{#2}
-      \ifthenelse{\equal{\filename@ext}{svg}}
-        % {\input{\filename@base.pdf_tex}}
-        {\includepdf[scale=0.5]{\filename@base.pdf}}
-        {\latexincludegraphics[#1]{#2}}}
+      \latexincludegraphics[#1]{#2}}
     {%
       \fbox{Image File doesn't exist}%
       \message{Image File #2 doesn't exist^^J}}
@@ -131,37 +121,7 @@
 
 \begin{document}
 
-\begin{luacode*}
-  local target = "./target/"
-
-  local function readSummary(file)
-    local handler = io.open(file, "r")
-    local summary = {}
-
-    for l in handler:lines() do
-      local n = string.match(l, "%[.*%]%((.*)%.md%)$")
-      table.insert(summary, n)
-    end
-    handler:close()
-
-    return summary
-  end
-
-  local function getTeXFile(target, name)
-    return target .. name .. ".tex"
-  end
-
-  local summaryFile = target .. "SUMMARY.md"
-
-  tex.print("\\frontmatter")
-
-  tex.print("\\tableofcontents")
-
-  tex.print("\\mainmatter")
-  tex.print("\\setcounter{secnumdepth}{3}")
-  for k, v in pairs(readSummary(summaryFile)) do
-    tex.print("\\input{" .. getTeXFile(target, v) .. "}")
-  end
-\end{luacode*}
+% 本文
+\input{body.tex}
 
 \end{document}
