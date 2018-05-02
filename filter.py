@@ -36,6 +36,12 @@ def mkFigure(path, align=None, scale=None):
 def mkRef(src):
     return RawInline('latex', "\\ref{" + src + u"}章")
 
+def mkBeginSup():
+    return RawInline('latex', '\\textsuperscript{')
+
+def mkEndSup():
+    return RawInline('latex', '}')
+
 def filter(key, value, fmt, meta):
     if key == 'CodeBlock':
         value[1] = value[1].replace(b'\xef\xbf\xbd', '?')
@@ -70,6 +76,10 @@ def filter(key, value, fmt, meta):
         if t == 'html' and '<img' in s:
             src = re.search(r'src="img/(.+?)"', s).group(1)
             return mkIncludegraphics(src)
+        elif t == 'html' and s == '<sup>':
+            return mkBeginSup()
+        elif t == 'html' and s == '</sup>':
+            return mkEndSup()
     elif key == 'Para':
         if value[0]['t'] == 'RawInline':
             fmt, content = value[0]['c']
