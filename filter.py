@@ -3,7 +3,7 @@
 
 import os
 import sys, base64, re
-from pandocfilters import toJSONFilter, CodeBlock, RawBlock, Str, RawInline
+from pandocfilters import toJSONFilter, CodeBlock, RawBlock, Str, RawInline, Para
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -92,6 +92,10 @@ def filter(key, value, fmt, meta):
                 if width:
                     width = float(width.group(1)) / 100
                 return mkFigure(src, align=cls, scale=width)
+            elif fmt == 'html' and 'class="caption"' in content:
+                return [Para(value), RawBlock('latex', r'\vspace{1em}')]
+            elif fmt == 'html' and 'class="filename"' in content:
+                return [RawBlock('latex', r'\vspace{1em}'), Para(value)]
 
 if __name__ == "__main__":
     toJSONFilter(filter)
