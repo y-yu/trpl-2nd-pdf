@@ -16,7 +16,7 @@ do
   fi
 done
 
-mkdir target
+mkdir target || rm -rf target && mkdir target
 
 for f in ./book/second-edition/src/*.md
 do
