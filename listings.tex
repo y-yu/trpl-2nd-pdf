@@ -2,6 +2,7 @@
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{smoke}{RGB}{245,245,245}
 
 \makeatletter
 \lst@CCPutMacro\lst@ProcessOther {"2D}{\lst@ttfamily{-{}}{-{}}}
@@ -10,19 +11,20 @@
 
 \lstset{
   basicstyle=\listingfont\footnotesize,
-  frame=single,
-  breaklines=true
-  numbersep=5pt,
+  frame=none,
+  breaklines=true,
   linewidth=\textwidth,
   xleftmargin=15pt,
-  xrightmargin=15pt
+  xrightmargin=15pt,
+  aboveskip=1em,
+  belowskip=0.5em,
+  backgroundcolor=\color{smoke}
 }
 
 \lstdefinestyle{rust}{
   breakatwhitespace=false,
   language=rust,
-  numbers=left,
-  numberstyle=\listingfont\scriptsize\color{gray},
+  numbers=none,
   captionpos=b,
   commentstyle=\listingfont\color{dkgreen},
   extendedchars=true,
