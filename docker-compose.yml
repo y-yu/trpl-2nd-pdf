@@ -1,0 +1,9 @@
+version: '3'
+services:
+  trpl-pdf-compile:
+    image: yyupw/trpl-2nd-pdf
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    volumes:
+      - .:/workdir

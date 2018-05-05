@@ -16,7 +16,9 @@ do
   fi
 done
 
-mkdir target
+if [[ ! -e target ]]; then
+  mkdir target
+fi
 
 for f in ./book/second-edition/src/*.md
 do
