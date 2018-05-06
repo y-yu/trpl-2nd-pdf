@@ -35,7 +35,8 @@ ENV PERSISTENT_DEPS \
     perl \
     ghostscript \
     inkscape \
-    bash
+    bash \
+    git
 
 ENV PANDOC_VERSION 2.1.3
 ENV PANDOC_DOWNLOAD_URL https://hackage.haskell.org/package/pandoc-$PANDOC_VERSION/pandoc-$PANDOC_VERSION.tar.gz

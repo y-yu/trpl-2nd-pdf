@@ -2,6 +2,15 @@
 
 set -e
 
+if [[ -d "./book" ]]; then
+  cd book
+  git checkout master
+  git pull origin master
+  cd ..
+else
+  git clone https://github.com/hazama-yuinyan/book
+fi
+
 cp -r ./book/second-edition/src/img ./
 for f in ./img/*.svg
 do
@@ -16,7 +25,7 @@ do
   fi
 done
 
-if [[ ! -e target ]]; then
+if [[ ! -d "./target" ]]; then
   mkdir target
 fi
 
