@@ -109,4 +109,4 @@ VOLUME ["/workdir"]
 
 WORKDIR /workdir
 
-ENTRYPOINT ["/bin/bash", "-c", "./setup.sh && make"]
+ENTRYPOINT ["/bin/bash", "-c", "./setup.sh && USE_SOURCEHAN=true make"]
