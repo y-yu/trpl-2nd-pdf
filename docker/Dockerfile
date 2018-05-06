@@ -83,12 +83,12 @@ RUN apk add --no-cache --virtual .pandoc-deps $PANDOC_DEPS  && \
 
 # Install Pandocfilter
 COPY requirements.txt ./
-RUN pip install --user --upgrade pip && \
-    pip install --user -r requirements.txt && \
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt && \
     rm requirements.txt
 
 # Install TeXLive
-RUN apk add --no-cache --no-cache --virtual .texlive-deps $TEXLIVE_DEPS && \
+RUN apk add --no-cache --virtual .texlive-deps $TEXLIVE_DEPS && \
     mkdir /tmp/install-tl-unx && \
     wget -qO- http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz | \
       tar -xz -C /tmp/install-tl-unx --strip-components=1 && \
@@ -99,7 +99,7 @@ RUN apk add --no-cache --no-cache --virtual .texlive-deps $TEXLIVE_DEPS && \
       "option_src 0" \
       > /tmp/install-tl-unx/texlive.profile && \
     /tmp/install-tl-unx/install-tl \
-      --profile=/tmp/install-tl-unx/texlive.profile && \
+      -profile /tmp/install-tl-unx/texlive.profile && \
     tlmgr install latexmk collection-luatex collection-langjapanese \
       collection-fontsrecommended type1cm mdframed needspace fncychap \
       everyhook svn-prov enumitem && \

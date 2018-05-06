@@ -9,9 +9,6 @@ env:
     - secure: pqNTvGb6GFPdps6T5eQFAXCojIlJ6pq3jR/PZ4NNbJZluS3wL+XVeZTl7PDaaCuFTRUzv6sFs3yUvnwEA3biHOVAYq7rVCS6T8qrqR3a/XO6vgspBd8Mr2M253DvPj3Kxi1cXmJ/ksQn9cvdrxTBs+Yqj249dXzh6C33NHcxHJYe2DOuqlnjZ0vYpqNjkc3dq6ackmlf7uHzlnn9YhZGEG6uY8J7lqcqQia8d9SI95a3P+nNoBfw/UyvYDXJXqDmtHCTlxpt4pD+HAXQ2fgdhYsFbmM16GIApkG33wPrYj2TXcsohfOec+gG+boDQVDckKHZISAl8ubor3I89mjg2S9gep1KpE0FYhH4KUHXyOK4WXvLX/TzT921wJVAzm0fHS4XJ7WBijxmX11f2QRIpDZh6kIIB68u8OMf7jV6C4zxL1nKA98SHDJ1Kx+dNfLYXkxh/FYocsipmm1yaNj5z2FP83eGUmqfeXh81bIIDa4Im8zMe03pMJREF7VGQH8AtputMdiFU4voNkZePCZgeshHMRZiVC9j4egFHbimOKFOayxDBlW+3831UMs20iBZrbVfcWr4cbqCgPOuYGV8avr7pu2SpHEiRC9t9po5uXU+U4SglUC5elQOwpUxtu2o5VgC9OwDyf15J+4M/ynWowFATX+rJqnFD+YQYCJ3Jqk=
 services:
   - docker
-cache:
-  directories:
-    - "$HOME/docker"
 branches:
   only:
     - master
@@ -22,17 +19,11 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  - if [[ -d $HOME/docker ]]; then
-      ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load";
-    fi
 install:
+  - docker-compose pull
   - docker-compose build
 script:
   - docker-compose up
-before_cache:
-  - mkdir -p $HOME/docker && docker images -a
-    --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' |
-    xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
 after_success:
   - ./travis/deploy_image.sh
   - ./travis/deploy_pdf.sh
