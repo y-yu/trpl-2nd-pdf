@@ -22,11 +22,17 @@ fi
 
 for f in ./book/second-edition/src/*.md
 do
-  if [[ $f =~ \./book/second-edition/src/(.*)\.md ]]; then
-    cp $f ./target/
-    echo $f  
-    FILENAME="${BASH_REMATCH[1]}.md" pandoc -o "./target/${BASH_REMATCH[1]}.tex" -f markdown_github+footnotes+header_attributes-hard_line_breaks --pdf-engine=lualatex --top-level-division=chapter --listings --filter ./filter.py $f
+  cp $f ./target/
+  echo $f
+
+  BASE=$(basename $f .md)
+  if [[ $BASE =~ appendix-(06|07)- ]]; then
+    FILTERS="--filter ./fix_headers.py --filter ./filter.py"
+  else
+    FILTERS="--filter ./filter.py"
   fi
+  FILENAME="$BASE" pandoc -o "./target/$BASE.tex" -f markdown_github+footnotes+header_attributes-hard_line_breaks \
+      --pdf-engine=lualatex --top-level-division=chapter --listings $FILTERS $f
 done
 
 python body.py < ./target/SUMMARY.md > body.tex
