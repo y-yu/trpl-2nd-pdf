@@ -102,7 +102,7 @@ RUN apk add --no-cache --virtual .texlive-deps $TEXLIVE_DEPS && \
       -profile /tmp/install-tl-unx/texlive.profile && \
     tlmgr install latexmk collection-luatex collection-langjapanese \
       collection-fontsrecommended type1cm mdframed needspace fncychap \
-      everyhook svn-prov enumitem && \
+      everyhook svn-prov enumitem background everypage && \
     rm -fr /tmp/install-tl-unx && \
     apk del .texlive-deps
 
