@@ -82,6 +82,8 @@
 \usepackage{longtable,booktabs}
 \usepackage{graphicx,grffile}
 
+\usepackage[some]{background}
+
 % 画像の設定
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>.8\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -118,6 +120,18 @@
 % 強調をボールドにする
 \let\emph\relax
 \DeclareTextFontCommand{\emph}{\gtfamily\bfseries}
+
+% Markdownソースの最終コミット時刻を取得
+\input{markdown_date.tex}
+\backgroundsetup{%
+  contents={Last Commit Date of Markdown Sources: \GitMarkdownDate},
+  placement=top,
+  opacity=0.8,
+  scale=1.5,
+  firstpage=true,
+  color=blue!40,
+  vshift=-2em
+}
 
 \begin{document}
 
