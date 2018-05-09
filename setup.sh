@@ -20,7 +20,7 @@ do
     PDFTEX=`pwd`/${BASH_REMATCH[1]}.pdf_tex
     inkscape -z -D --file="$SVG" --export-pdf="$PDF" --export-latex
     PAGES=$(egrep -a '/Type /Page\b' "$PDF" | wc -l | tr -d ' ')
-    python fix_pdf_tex.py "$PAGES" < "$PDFTEX" > "$PDFTEX.tmp"
+    python ./python/fix_pdf_tex.py "$PAGES" < "$PDFTEX" > "$PDFTEX.tmp"
     mv "$PDFTEX.tmp" "$PDFTEX"
   fi
 done
@@ -36,12 +36,12 @@ do
 
   BASE=$(basename $f .md)
   if [[ $BASE =~ appendix-(06|07)- ]]; then
-    FILTERS="--filter ./fix_headers.py --filter ./filter.py"
+    FILTERS="--filter ./python/fix_headers.py --filter ./python/filter.py"
   else
-    FILTERS="--filter ./filter.py"
+    FILTERS="--filter ./python/filter.py"
   fi
   FILENAME="$BASE" pandoc -o "./target/$BASE.tex" -f markdown_github+footnotes+header_attributes-hard_line_breaks \
       --pdf-engine=lualatex --top-level-division=chapter --listings $FILTERS $f
 done
 
-python body.py < ./target/SUMMARY.md > body.tex
+python ./python/body.py < ./target/SUMMARY.md > body.tex
