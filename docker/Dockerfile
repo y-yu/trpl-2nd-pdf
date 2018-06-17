@@ -52,18 +52,18 @@ RUN apk add --no-cache --virtual .persistent-deps $PERSISTENT_DEPS
 # Setup fonts
 RUN mkdir -p $FONT_PATH && \
     apk add --no-cache --virtual .font-deps $FONT_DEPS && \
-    wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip && \
-      unzip 1.050R-it.zip && \
-      cp source-code-pro-2.030R-ro-1.050R-it/OTF/*.otf $FONT_PATH && \
-      rm -rf 1.050R-it.zip source-code-pro-2.030R-ro-1.050R-it && \
-    wget https://github.com/adobe-fonts/source-han-sans/raw/release/SubsetOTF/SourceHanSansJP.zip && \
-      unzip SourceHanSansJP.zip && \
-      cp SourceHanSansJP/*.otf $FONT_PATH && \
-      rm -rf SourceHanSansJP.zip SourceHanSansJP && \
-    wget https://github.com/adobe-fonts/source-han-serif/raw/release/SubsetOTF/SourceHanSerifJP.zip && \
-      unzip SourceHanSerifJP.zip && \
-      cp SourceHanSerifJP/*.otf $FONT_PATH && \
-      rm -rf SourceHanSerifJP.zip SourceHanSerifJP && \
+    wget https://github.com/miiton/Cica/releases/download/v2.1.0/Cica_v2.1.0.zip && \
+      unzip Cica_v2.1.0.zip && \
+      cp Cica_v2.1.0/*.ttf $FONT_PATH && \
+      rm -rf Cica_v2.1.0.zip Cica_v2.1.0 && \
+    wget https://github.com/adobe-fonts/source-han-sans/raw/release/SuperOTC/SourceHanSans.ttc.zip && \
+      unzip SourceHanSans.ttc.zip && \
+      mv SourceHanSans.ttc $FONT_PATH && \
+      rm SourceHanSans.ttc.zip && \
+    wget https://github.com/adobe-fonts/source-han-serif/raw/release/SuperOTC/SourceHanSerif.ttc.zip && \
+      unzip SourceHanSerif.ttc.zip && \
+      mv SourceHanSerif.ttc $FONT_PATH && \
+      rm SourceHanSerif.ttc.zip && \
     fc-cache -f -v && \
     apk del .font-deps 
 
