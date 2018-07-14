@@ -7,7 +7,7 @@
 import os
 import sys, base64
 import re
-from pandocfilters import toJSONFilter, CodeBlock, RawBlock, Str, RawInline, Para
+from pandocfilters import toJSONFilters, CodeBlock, RawBlock, Str, RawInline, Para
 
 # エスケープ文字にはソースには使われていない文字を指定する
 # 大きなコードポイントを指定するとうまくいかない
@@ -87,8 +87,12 @@ def mkBeginSup():
 def mkEndSup():
     return RawInline('latex', '}')
 
+import json
+
 def filter(key, value, fmt, meta):
-    if key == 'CodeBlock':  # CodeBlock Attr String
+    if key == 'Header':
+        return RawBlock('header-json', json.dumps(value))
+    elif key == 'CodeBlock':  # CodeBlock Attr String
         value[1] = value[1].replace('\uFFFD', '?')
         [[ident, classes, kvs], code] = value
         c = classes[0].split(',')[0]
@@ -121,11 +125,6 @@ def filter(key, value, fmt, meta):
             s = escape_tex(value[1])
             s = scriptify(s, '')
             return RawInline('latex', r'\texttt{%s}' % s)
-    elif key == 'Header':  # Int Attr [Inline]
-        [level, _, _] = value
-        if level == 1:
-            file_name = os.getenv('FILENAME', "FILE_DOES_NOT_EXIST")
-            value[1][0] = file_name
     elif key == 'RawInline':
         [t, s] = value
         if t == 'html' and '<img' in s:
@@ -152,5 +151,14 @@ def filter(key, value, fmt, meta):
             elif fmt == 'html' and 'class="filename"' in content:
                 return [RawBlock('latex', r'\vspace{1em}'), Para(value)]
 
+def filter1(key, value, fmt, meta):
+    if key == 'RawBlock' and value[0] == 'header-json':
+        value = json.loads(value[1])
+        [level, _, _] = value
+        if level == 1:
+            file_name = os.getenv('FILENAME', "FILE_DOES_NOT_EXIST")
+            value[1][0] = file_name
+        return {'t': 'Header', 'c': value}
+
 if __name__ == "__main__":
-    toJSONFilter(filter)
+    toJSONFilters((filter, filter1))
