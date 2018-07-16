@@ -28,8 +28,7 @@ ENV FONT_DEPS \
 ENV FONT_PATH /usr/share/fonts/
 
 ENV PERSISTENT_DEPS \
-    python \
-    py2-pip \
+    python3 \
     wget \
     make \
     perl \
@@ -52,18 +51,41 @@ RUN apk add --no-cache --virtual .persistent-deps $PERSISTENT_DEPS
 # Setup fonts
 RUN mkdir -p $FONT_PATH && \
     apk add --no-cache --virtual .font-deps $FONT_DEPS && \
+    # Noto Serif
+    wget https://noto-website-2.storage.googleapis.com/pkgs/NotoSerif-unhinted.zip && \
+      unzip -d NotoSerif-unhinted NotoSerif-unhinted.zip && \
+      cp NotoSerif-unhinted/*.ttf $FONT_PATH && \
+      rm -rf NotoSerif-unhinted.zip NotoSerif-unhinted && \
+    # Noto Naskh Arabic
+    wget https://noto-website-2.storage.googleapis.com/pkgs/NotoNaskhArabic-unhinted.zip && \
+      unzip -d NotoNaskhArabic-unhinted NotoNaskhArabic-unhinted.zip && \
+      cp NotoNaskhArabic-unhinted/*.ttf $FONT_PATH && \
+      rm -rf NotoNaskhArabic-unhinted.zip NotoNaskhArabic-unhinted && \
+    # Noto Serif CJK JP
+    wget https://noto-website-2.storage.googleapis.com/pkgs/NotoSerifCJKjp-hinted.zip && \
+      unzip -d NotoSerifCJKjp-hinted NotoSerifCJKjp-hinted.zip && \
+      cp NotoSerifCJKjp-hinted/*.otf $FONT_PATH && \
+      rm -rf NotoSerifCJKjp-hinted.zip NotoSerifCJKjp-hinted && \
+    # Noto Sans Devanagari
+    wget https://noto-website-2.storage.googleapis.com/pkgs/NotoSansDevanagari-unhinted.zip && \
+      unzip -d NotoSansDevanagari-unhinted NotoSansDevanagari-unhinted.zip && \
+      cp NotoSansDevanagari-unhinted/*.ttf $FONT_PATH && \
+      rm -rf NotoSansDevanagari-unhinted.zip NotoSansDevanagari-unhinted && \
+    # Noto Emoji
+    wget https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip && \
+      unzip -d NotoEmoji-unhinted NotoEmoji-unhinted.zip && \
+      cp NotoEmoji-unhinted/*.ttf $FONT_PATH && \
+      rm -rf NotoEmoji-unhinted.zip  NotoEmoji-unhinted && \
+    # Noto Sans Hebrew
+    wget https://noto-website-2.storage.googleapis.com/pkgs/NotoSansHebrew-unhinted.zip && \
+      unzip -d NotoSansHebrew-unhinted NotoSansHebrew-unhinted.zip && \
+      cp NotoSansHebrew-unhinted/*.ttf $FONT_PATH && \
+      rm -rf NotoSansHebrew-unhinted.zip NotoSansHebrew-unhinted && \
+    # Source Code Pro
     wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip && \
       unzip 1.050R-it.zip && \
       cp source-code-pro-2.030R-ro-1.050R-it/OTF/*.otf $FONT_PATH && \
       rm -rf 1.050R-it.zip source-code-pro-2.030R-ro-1.050R-it && \
-    wget https://github.com/adobe-fonts/source-han-sans/raw/release/SubsetOTF/SourceHanSansJP.zip && \
-      unzip SourceHanSansJP.zip && \
-      cp SourceHanSansJP/*.otf $FONT_PATH && \
-      rm -rf SourceHanSansJP.zip SourceHanSansJP && \
-    wget https://github.com/adobe-fonts/source-han-serif/raw/release/SubsetOTF/SourceHanSerifJP.zip && \
-      unzip SourceHanSerifJP.zip && \
-      cp SourceHanSerifJP/*.otf $FONT_PATH && \
-      rm -rf SourceHanSerifJP.zip SourceHanSerifJP && \
     fc-cache -f -v && \
     apk del .font-deps 
 
@@ -83,8 +105,8 @@ RUN apk add --no-cache --virtual .pandoc-deps $PANDOC_DEPS  && \
 
 # Install Pandocfilter
 COPY requirements.txt ./
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt && \
+RUN pip3 install --upgrade pip && \
+    pip3 install -r requirements.txt && \
     rm requirements.txt
 
 # Install TeXLive
@@ -110,4 +132,4 @@ VOLUME ["/workdir"]
 
 WORKDIR /workdir
 
-ENTRYPOINT ["/bin/bash", "-c", "./setup.sh && USE_SOURCEHAN=true make"]
+ENTRYPOINT ["/bin/bash", "-c", "./setup.sh && make"]
