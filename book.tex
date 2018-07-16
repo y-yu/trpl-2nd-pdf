@@ -1,6 +1,6 @@
 \documentclass[10pt, a4paper, oneside]{ltjsbook}
 \usepackage{amssymb,amsmath}
-\usepackage{fontspec}
+\usepackage{luatexja-fontspec}
 \usepackage[Lenny]{fncychap}
 
 % チャプターマークの設定
@@ -42,21 +42,31 @@
 \usepackage{luacode}
 
 % フォント設定
-\begin{luacode*}
-  local USE_YUFONT = os.getenv"USE_YUFONT"
-  local USE_SOURCEHAN = os.getenv"USE_SOURCEHAN"
-  local USE_HIRAGINO = os.getenv"USE_HIRAGINO"
-  
-  if USE_YUFONT then
-    tex.sprint("\\AtBeginDocument{\\usepackage[yu-osx, nfssonly]{luatexja-preset}}")
-  elseif USE_SOURCEHAN then
-    tex.sprint("\\AtBeginDocument{\\usepackage[sourcehan-jp, nfssonly]{luatexja-preset}}")
-  elseif USE_HIRAGINO then
-    tex.sprint("\\AtBeginDocument{\\usepackage[hiragino-pro, nfssonly]{luatexja-preset}}")
-  else
-    tex.sprint("\\AtBeginDocument{\\usepackage[ipaex, nfssonly]{luatexja-preset}}")
-  end
-\end{luacode*}
+% \ltjsetparameter{jacharrange={...}} の挙動が不安定
+% うまくいかなければ \ltjalchar でしのぐ
+
+\setmainfont{Noto Serif}
+\setmainjfont{Noto Serif CJK JP}
+\setmonofont{Source Code Pro}
+
+\ltjsetparameter{jacharrange={-2}}
+
+% \newcommadn\cyrillictext[1]{{\cyrillicfont #1}}
+% \newfontfamily\cyrillicfont{Noto Serif}
+\newcommand{\arabictext}[1]{{\arabicfont {\textdir TRT #1}}}
+\newcommand{\cjkunifiedtext}[1]{{\cjkunifiedfont #1}}
+\newcommand{\devanagaritext}[1]{{\devanagarifont #1}}
+\newcommand{\emojitext}[1]{{\emojifont #1}}
+\newcommand{\hangultext}[1]{{\hangulfont #1}}
+\newcommand{\hebrewtext}[1]{{\hebrewfont {\textdir TRT #1}}}
+\newcommand{\letterliketext}[1]{{\letterlikefont #1}}
+\newfontfamily\arabicfont[Script=Arabic]{Noto Naskh Arabic}
+\newfontfamily\cjkunifiedfont{Noto Serif CJK JP}
+\newfontfamily\devanagarifont{Noto Sans Devanagari}
+\newfontfamily\emojifont{Noto Emoji}
+\newfontfamily\hangulfont{Noto Serif CJK JP}
+\newfontfamily\hebrewfont{Noto Sans Hebrew}
+\newfontfamily\letterlikefont{Noto Serif}
 
 \usepackage[centering]{geometry}
 

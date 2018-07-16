@@ -20,7 +20,7 @@ do
     PDFTEX=`pwd`/${BASH_REMATCH[1]}.pdf_tex
     inkscape -z -D --file="$SVG" --export-pdf="$PDF" --export-latex
     PAGES=$(egrep -a '/Type /Page\b' "$PDF" | wc -l | tr -d ' ')
-    python ./python/fix_pdf_tex.py "$PAGES" < "$PDFTEX" > "$PDFTEX.tmp"
+    python3 ./python/fix_pdf_tex.py "$PAGES" < "$PDFTEX" > "$PDFTEX.tmp"
     mv "$PDFTEX.tmp" "$PDFTEX"
   fi
 done
@@ -44,4 +44,4 @@ do
       --pdf-engine=lualatex --top-level-division=chapter --listings $FILTERS $f
 done
 
-python ./python/body.py < ./target/SUMMARY.md > body.tex
+python3 ./python/body.py < ./target/SUMMARY.md > body.tex

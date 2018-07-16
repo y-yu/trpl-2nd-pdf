@@ -1,12 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
-import sys, base64, re
 from pandocfilters import toJSONFilter, Header
-
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 def action(key, value, fmt, meta):
     # Header Int Attr [Inline]
