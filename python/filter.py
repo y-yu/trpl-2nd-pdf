@@ -120,6 +120,7 @@ def filter(key, value, fmt, meta):
         return RawInline('latex', value)
     elif key == 'Code':  # Code Attr String
         value[1] = value[1].replace('\uFFFD', '?')
+        value[1] = value[1].replace('+CHARPIPE+', '|')
         # \lstinline 内では LaTeX コマンドが使えないので \texttt を使う
         if RE_SCRIPT.search(value[1]):
             s = escape_tex(value[1])

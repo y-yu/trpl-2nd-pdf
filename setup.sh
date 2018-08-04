@@ -29,19 +29,26 @@ if [[ ! -d "./target" ]]; then
   mkdir target
 fi
 
-for f in ./book/second-edition/src/*.md
-do
-  cp $f ./target/
-  echo $f
+for f in book/second-edition/src/*.md; do
+  cp "$f" target/
+  echo "$f"
+done
 
+python3 python/fix_table.py < target/appendix-02-operators.md > target/tmp.md
+mv target/tmp.md target/appendix-02-operators.md
+
+for f in target/*.md; do
   BASE=$(basename $f .md)
   if [[ $BASE =~ appendix-(06|07)- ]]; then
     FILTERS="--filter ./python/fix_headers.py --filter ./python/filter.py"
   else
     FILTERS="--filter ./python/filter.py"
   fi
+  if [[ $BASE =~ appendix-02- ]]; then
+    COLUMNS="--columns=10"
+  fi
   FILENAME="$BASE" pandoc -o "./target/$BASE.tex" -f markdown_github+footnotes+header_attributes-hard_line_breaks \
-      --pdf-engine=lualatex --top-level-division=chapter --listings $FILTERS $f
+      --pdf-engine=lualatex --top-level-division=chapter $COLUMNS --listings $FILTERS $f
 done
 
 python3 ./python/body.py < ./target/SUMMARY.md > body.tex
