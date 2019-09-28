@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-glibc:alpine-3.7
+FROM frolvlad/alpine-glibc:alpine-3.10
 
 MAINTAINER yyu <yyu [at] mental.poker>
 
@@ -37,7 +37,7 @@ ENV PERSISTENT_DEPS \
     bash \
     git
 
-ENV PANDOC_VERSION 2.1.3
+ENV PANDOC_VERSION 2.7.3
 ENV PANDOC_DOWNLOAD_URL https://hackage.haskell.org/package/pandoc-$PANDOC_VERSION/pandoc-$PANDOC_VERSION.tar.gz
 ENV PANDOC_ROOT /usr/local/pandoc
 
