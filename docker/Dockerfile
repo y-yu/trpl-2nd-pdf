@@ -41,7 +41,7 @@ ENV PANDOC_VERSION 2.7.3
 ENV PANDOC_DOWNLOAD_URL https://hackage.haskell.org/package/pandoc-$PANDOC_VERSION/pandoc-$PANDOC_VERSION.tar.gz
 ENV PANDOC_ROOT /usr/local/pandoc
 
-ENV PATH $TEXLIVE_PATH/bin/x86_64-linuxmusl:$PANDOC_ROOT/bin:$PATH
+ENV PATH $TEXLIVE_PATH/bin/x86_64-linux:$PANDOC_ROOT/bin:$PATH
 
 RUN apk upgrade --update
 
