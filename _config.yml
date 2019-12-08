@@ -1,0 +1,5 @@
+plugins:
+  - jekyll-redirect-from
+redirect_from:
+  - /book.pdf
+redirect_to: https://doc.rust-jp.rs/book-ja-pdf/book.pdf
